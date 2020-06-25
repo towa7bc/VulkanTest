@@ -1,7 +1,7 @@
-#include "Application.hpp"
+#include "Application2.hpp"
 
 int main() {
-  Application app;
+  Application2 app;
 
   try {
     app.run();

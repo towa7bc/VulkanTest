@@ -3,8 +3,10 @@ add_executable(
         main.cpp
         stb_image.cpp
         stb_image.hpp
-        Application.cpp
-        Application.hpp
+        #Application.cpp
+        #Application.hpp
+        Application2.cpp
+        Application2.hpp
 )
 
 find_package(Vulkan REQUIRED)
