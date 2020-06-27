@@ -1073,6 +1073,10 @@ void Application2::loadModel() {
       throw std::runtime_error("Error::Assimp::" +
                                std::string(importer.GetErrorString()));
     }
+    if (!scene->HasMeshes()) {
+      throw std::runtime_error("Error::Assimp::" +
+                               std::string(importer.GetErrorString()));
+    }
     for (unsigned int i{0}; i < scene->mNumMeshes; ++i) {
       const auto* mesh = scene->mMeshes[i];
       for (unsigned int j{0}; j < mesh->mNumVertices; ++j) {
@@ -1089,6 +1093,10 @@ void Application2::loadModel() {
         vertices.push_back(vertex);
       }
       auto indexBase = indices.size();
+      if (!mesh->HasFaces()) {
+        throw std::runtime_error("Error::Assimp::" +
+                                 std::string(importer.GetErrorString()));
+      }
       for (unsigned int k{0}; k < mesh->mNumFaces; ++k) {
         auto face = mesh->mFaces[k];
         if (face.mNumIndices != 3) {
