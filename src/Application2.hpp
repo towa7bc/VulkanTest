@@ -145,69 +145,69 @@ class Application2 {
   void run();
 
  private:
-  GLFWwindow* window;
+  GLFWwindow* window_{};
 
-  VkInstance instance;
-  VkDebugUtilsMessengerEXT debugMessenger;
-  VkSurfaceKHR surface;
+  VkInstance instance_{};
+  VkDebugUtilsMessengerEXT debugMessenger_{};
+  VkSurfaceKHR surface_{};
 
-  VkPhysicalDevice physicalDevice = VK_NULL_HANDLE;
-  VkSampleCountFlagBits msaaSamples = VK_SAMPLE_COUNT_1_BIT;
-  VkDevice device;
+  VkPhysicalDevice physicalDevice_ = VK_NULL_HANDLE;
+  VkSampleCountFlagBits msaaSamples_ = VK_SAMPLE_COUNT_1_BIT;
+  VkDevice device_{};
 
-  VkQueue graphicsQueue;
-  VkQueue presentQueue;
+  VkQueue graphicsQueue_{};
+  VkQueue presentQueue_{};
 
-  VkSwapchainKHR swapChain;
-  std::vector<VkImage> swapChainImages;
-  VkFormat swapChainImageFormat;
-  VkExtent2D swapChainExtent;
-  std::vector<VkImageView> swapChainImageViews;
-  std::vector<VkFramebuffer> swapChainFramebuffers;
+  VkSwapchainKHR swapChain_{};
+  std::vector<VkImage> swapChainImages_;
+  VkFormat swapChainImageFormat_{};
+  VkExtent2D swapChainExtent_{};
+  std::vector<VkImageView> swapChainImageViews_;
+  std::vector<VkFramebuffer> swapChainFramebuffers_;
 
-  VkRenderPass renderPass;
-  VkDescriptorSetLayout descriptorSetLayout;
-  VkPipelineLayout pipelineLayout;
-  VkPipeline graphicsPipeline;
+  VkRenderPass renderPass_{};
+  VkDescriptorSetLayout descriptorSetLayout_{};
+  VkPipelineLayout pipelineLayout_{};
+  VkPipeline graphicsPipeline_{};
 
-  VkCommandPool commandPool;
+  VkCommandPool commandPool_{};
 
-  VkImage colorImage;
-  VkDeviceMemory colorImageMemory;
-  VkImageView colorImageView;
+  VkImage colorImage_{};
+  VkDeviceMemory colorImageMemory_{};
+  VkImageView colorImageView_{};
 
-  VkImage depthImage;
-  VkDeviceMemory depthImageMemory;
-  VkImageView depthImageView;
+  VkImage depthImage_{};
+  VkDeviceMemory depthImageMemory_{};
+  VkImageView depthImageView_{};
 
-  uint32_t mipLevels;
-  VkImage textureImage;
-  VkDeviceMemory textureImageMemory;
-  VkImageView textureImageView;
-  VkSampler textureSampler;
+  uint32_t mipLevels_{};
+  VkImage textureImage_{};
+  VkDeviceMemory textureImageMemory_{};
+  VkImageView textureImageView_{};
+  VkSampler textureSampler_{};
 
-  std::vector<Vertex> vertices;
-  std::vector<uint32_t> indices;
-  VkBuffer vertexBuffer;
-  VkDeviceMemory vertexBufferMemory;
-  VkBuffer indexBuffer;
-  VkDeviceMemory indexBufferMemory;
+  std::vector<Vertex> vertices_;
+  std::vector<uint32_t> indices_;
+  VkBuffer vertexBuffer_{};
+  VkDeviceMemory vertexBufferMemory_{};
+  VkBuffer indexBuffer_{};
+  VkDeviceMemory indexBufferMemory_{};
 
-  std::vector<VkBuffer> uniformBuffers;
-  std::vector<VkDeviceMemory> uniformBuffersMemory;
+  std::vector<VkBuffer> uniformBuffers_;
+  std::vector<VkDeviceMemory> uniformBuffersMemory_;
 
-  VkDescriptorPool descriptorPool;
-  std::vector<VkDescriptorSet> descriptorSets;
+  VkDescriptorPool descriptorPool_{};
+  std::vector<VkDescriptorSet> descriptorSets_;
 
-  std::vector<VkCommandBuffer> commandBuffers;
+  std::vector<VkCommandBuffer> commandBuffers_;
 
-  std::vector<VkSemaphore> imageAvailableSemaphores;
-  std::vector<VkSemaphore> renderFinishedSemaphores;
-  std::vector<VkFence> inFlightFences;
-  std::vector<VkFence> imagesInFlight;
-  size_t currentFrame = 0;
+  std::vector<VkSemaphore> imageAvailableSemaphores_;
+  std::vector<VkSemaphore> renderFinishedSemaphores_;
+  std::vector<VkFence> inFlightFences_;
+  std::vector<VkFence> imagesInFlight_;
+  size_t currentFrame_ = 0;
 
-  bool framebufferResized = false;
+  bool framebufferResized_ = false;
 
   void initWindow();
   static void framebufferResizeCallback(GLFWwindow* window, int width,
