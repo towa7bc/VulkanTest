@@ -1447,7 +1447,7 @@ void Application2::updateUniformBuffer(uint32_t currentImage) {
                    .count();
 
   UniformBufferObject ubo{};
-  ubo.model = glm::rotate(glm::mat4(1.0f), time * glm::radians(90.0f),
+  ubo.model = glm::rotate(glm::mat4(1.0f), time * glm::radians(60.0f),
                           glm::vec3(0.0f, 0.0f, 1.0f));
   ubo.view =
       glm::lookAt(glm::vec3(2.0f, 2.0f, 2.0f), glm::vec3(0.0f, 0.0f, 0.0f),
@@ -1476,7 +1476,8 @@ void Application2::drawFrame() {
   if (result == VK_ERROR_OUT_OF_DATE_KHR) {
     recreateSwapChain();
     return;
-  } else if (result != VK_SUCCESS && result != VK_SUBOPTIMAL_KHR) {
+  }
+  if (result != VK_SUCCESS && result != VK_SUBOPTIMAL_KHR) {
     throw std::runtime_error("failed to acquire swap chain image!");
   }
 
