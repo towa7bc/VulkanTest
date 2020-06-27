@@ -4,12 +4,6 @@
 
 #include "Application2.hpp"
 
-#include <assimp/postprocess.h>  // Post processing flags
-#include <assimp/scene.h>        // Output data structure
-
-#include <assimp/Importer.hpp>  // C++ importer interface
-#include <future>
-
 VkResult CreateDebugUtilsMessengerEXT(
     VkInstance instance, const VkDebugUtilsMessengerCreateInfoEXT* pCreateInfo,
     const VkAllocationCallbacks* pAllocator,
@@ -1073,9 +1067,9 @@ void Application2::loadModel() {
     Assimp::Importer importer;
     const auto* scene = importer.ReadFile(
         MODEL_PATH.data(), aiProcess_Triangulate | aiProcess_FlipUVs);
-    if ((scene == nullptr) ||
+    if (scene == nullptr ||
         ((scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE) != 0u) ||
-        (scene->mRootNode == nullptr)) {
+        scene->mRootNode == nullptr) {
       throw std::runtime_error("Error::Assimp::" +
                                std::string(importer.GetErrorString()));
     }
