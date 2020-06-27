@@ -255,6 +255,7 @@ class Application2 {
   void copyBufferToImage(VkBuffer buffer, VkImage image, uint32_t width,
                          uint32_t height);
   void loadModel();
+  void loadModel2();
   void createVertexBuffer();
   void createIndexBuffer();
   void createUniformBuffers();

@@ -4,6 +4,11 @@
 
 #include "Application2.hpp"
 
+#include <assimp/postprocess.h>  // Post processing flags
+#include <assimp/scene.h>        // Output data structure
+
+#include <assimp/Importer.hpp>  // C++ importer interface
+
 VkResult CreateDebugUtilsMessengerEXT(
     VkInstance instance, const VkDebugUtilsMessengerCreateInfoEXT* pCreateInfo,
     const VkAllocationCallbacks* pAllocator,
@@ -68,7 +73,7 @@ void Application2::initVulkan() {
   createTextureImage();
   createTextureImageView();
   createTextureSampler();
-  loadModel();
+  loadModel2();
   createVertexBuffer();
   createIndexBuffer();
   createUniformBuffers();
@@ -1060,6 +1065,47 @@ void Application2::copyBufferToImage(VkBuffer buffer, VkImage image,
                          VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &region);
 
   endSingleTimeCommands(commandBuffer);
+}
+
+void Application2::loadModel2() {
+  Assimp::Importer importer;
+  const aiScene* scene = importer.ReadFile(
+      MODEL_PATH.data(), aiProcess_Triangulate | aiProcess_FlipUVs);
+
+  if ((scene == nullptr) ||
+      ((scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE) != 0u) ||
+      (scene->mRootNode == nullptr)) {
+    throw std::runtime_error("Error::Assimp::" +
+                             std::string(importer.GetErrorString()));
+  }
+
+  std::unordered_map<Vertex, uint32_t> uniqueVertices{};
+  for (unsigned int i{0}; i < scene->mNumMeshes; ++i) {
+    const auto* mesh = scene->mMeshes[i];
+    for (unsigned int j{0}; j < mesh->mNumVertices; ++j) {
+      auto mVertex = mesh->mVertices[j];
+      Vertex vertex{};
+      vertex.color = {1.0f, 1.0f, 1.0f};
+      vertex.pos = {mVertex.x, mVertex.y, mVertex.z};
+      if (mesh->mTextureCoords[0] == nullptr) {
+        vertex.texCoord = {0.0f, 0.0f};
+      } else {
+        vertex.texCoord = {mesh->mTextureCoords[0][j].x,
+                           mesh->mTextureCoords[0][j].y};
+      }
+      vertices.push_back(vertex);
+    }
+    auto indexBase = indices.size();
+    for (unsigned int k{0}; k < mesh->mNumFaces; ++k) {
+      aiFace face = mesh->mFaces[k];
+      if (face.mNumIndices != 3) {
+        continue;
+      }
+      indices.push_back(indexBase + face.mIndices[0]);
+      indices.push_back(indexBase + face.mIndices[1]);
+      indices.push_back(indexBase + face.mIndices[2]);
+    }
+  }
 }
 
 void Application2::loadModel() {
