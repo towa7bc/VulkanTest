@@ -35,13 +35,13 @@
 
 #include "stb_image.hpp"
 
-const uint32_t WIDTH = 1024;
-const uint32_t HEIGHT = 768;
+constexpr uint32_t WIDTH = 1024;
+constexpr uint32_t HEIGHT = 768;
 
 const std::string MODEL_PATH = "../../src/models/viking_room.obj";
 const std::string TEXTURE_PATH = "../../src/textures/viking_room.png";
 
-const int MAX_FRAMES_IN_FLIGHT = 2;
+constexpr int MAX_FRAMES_IN_FLIGHT = 2;
 
 const std::vector<const char*> validationLayers = {
     "VK_LAYER_KHRONOS_validation"};
@@ -50,9 +50,9 @@ const std::vector<const char*> deviceExtensions = {
     VK_KHR_SWAPCHAIN_EXTENSION_NAME};
 
 #ifdef NDEBUG
-const bool enableValidationLayers = false;
+constexpr bool enableValidationLayers = false;
 #else
-const bool enableValidationLayers = true;
+constexpr bool enableValidationLayers = true;
 #endif
 
 VkResult CreateDebugUtilsMessengerEXT(
