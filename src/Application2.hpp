@@ -11,7 +11,6 @@
 #define GLM_FORCE_RADIANS
 #define GLM_FORCE_DEPTH_ZERO_TO_ONE
 #define GLM_ENABLE_EXPERIMENTAL
-#include <tiny_obj_loader.h>
 
 #include <algorithm>
 #include <array>
@@ -255,7 +254,6 @@ class Application2 {
   void copyBufferToImage(VkBuffer buffer, VkImage image, uint32_t width,
                          uint32_t height);
   void loadModel();
-  void loadModel2();
   void createVertexBuffer();
   void createIndexBuffer();
   void createUniformBuffers();

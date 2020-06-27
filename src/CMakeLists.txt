@@ -20,6 +20,5 @@ target_link_libraries(
         CONAN_PKG::glm
         CONAN_PKG::glfw
         CONAN_PKG::assimp
-        CONAN_PKG::tinyobjloader
         Vulkan::Vulkan
 )
