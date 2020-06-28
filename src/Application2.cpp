@@ -1089,6 +1089,7 @@ void Application2::loadModel() {
       throw std::runtime_error("Error::Assimp::" +
                                std::string(importer.GetErrorString()));
     }
+    std::unordered_map<Vertex, uint32_t> uniqueVertices{};
     for (unsigned int i{0}; i < scene->mNumMeshes; ++i) {
       const auto* mesh = scene->mMeshes[i];
       for (unsigned int j{0}; j < mesh->mNumVertices; ++j) {
@@ -1102,21 +1103,11 @@ void Application2::loadModel() {
           vertex.texCoord = {mesh->mTextureCoords[0][j].x,
                              mesh->mTextureCoords[0][j].y};
         }
-        vertices_.push_back(vertex);
-      }
-      auto indexBase = indices_.size();
-      if (!mesh->HasFaces()) {
-        throw std::runtime_error("Error::Assimp::" +
-                                 std::string(importer.GetErrorString()));
-      }
-      for (unsigned int k{0}; k < mesh->mNumFaces; ++k) {
-        auto face = mesh->mFaces[k];
-        if (face.mNumIndices != 3) {
-          continue;
+        if (uniqueVertices.count(vertex) == 0) {
+          uniqueVertices[vertex] = static_cast<uint32_t>(vertices_.size());
+          vertices_.push_back(vertex);
         }
-        indices_.push_back(indexBase + face.mIndices[0]);
-        indices_.push_back(indexBase + face.mIndices[1]);
-        indices_.push_back(indexBase + face.mIndices[2]);
+        indices_.push_back(uniqueVertices[vertex]);
       }
     }
   });
@@ -1447,7 +1438,7 @@ void Application2::updateUniformBuffer(uint32_t currentImage) {
                    .count();
 
   UniformBufferObject ubo{};
-  ubo.model = glm::rotate(glm::mat4(1.0f), time * glm::radians(60.0f),
+  ubo.model = glm::rotate(glm::mat4(1.0f), time * glm::radians(30.0f),
                           glm::vec3(0.0f, 0.0f, 1.0f));
   ubo.view =
       glm::lookAt(glm::vec3(2.0f, 2.0f, 2.0f), glm::vec3(0.0f, 0.0f, 0.0f),
