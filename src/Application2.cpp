@@ -60,18 +60,35 @@ void Application2::initWindow() {
         glfwSetWindowShouldClose(window, GLFW_TRUE);
         break;
       case GLFW_KEY_F:
-        static bool toggleFullScreen{true};
-        if (toggleFullScreen) {
+        if (TOGGLEFULLSCREEN) {
           GLFWmonitor* monitor = glfwGetPrimaryMonitor();
           const GLFWvidmode* mode = glfwGetVideoMode(monitor);
           glfwSetWindowMonitor(window, monitor, 0, 0, mode->width, mode->height,
                                mode->refreshRate);
-          toggleFullScreen = false;
+          TOGGLEFULLSCREEN = false;
         } else {
           glfwSetWindowMonitor(window, nullptr, XPOSITION, YPOSITION, WIDTH,
                                HEIGHT, 0);
-          toggleFullScreen = true;
+          TOGGLEFULLSCREEN = true;
         }
+        break;
+      case GLFW_KEY_UP:
+        ZOOMDEGREES -= 10.0f;
+        break;
+      case GLFW_KEY_DOWN:
+        ZOOMDEGREES += 10.0f;
+        break;
+      case GLFW_KEY_LEFT:
+        ROTATEDEGREES -= 10.0f;
+        break;
+      case GLFW_KEY_RIGHT:
+        ROTATEDEGREES += 10.0f;
+        break;
+      case GLFW_KEY_PAGE_UP:
+        TRANSLATEFACTOR -= 1.0f;
+        break;
+      case GLFW_KEY_PAGE_DOWN:
+        TRANSLATEFACTOR += 1.0f;
         break;
       default:
         break;
@@ -1467,13 +1484,15 @@ void Application2::updateUniformBuffer(uint32_t currentImage) {
                    .count();
 
   UniformBufferObject ubo{};
-  ubo.model = glm::rotate(glm::mat4(1.0f), time * glm::radians(30.0f),
+  ubo.model = glm::rotate(glm::mat4(1.0f), time * glm::radians(ROTATEDEGREES),
                           glm::vec3(0.0f, 0.0f, 1.0f));
+  ubo.model *=
+      glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, TRANSLATEFACTOR, 0.0f));
   ubo.view =
       glm::lookAt(glm::vec3(2.0f, 2.0f, 2.0f), glm::vec3(0.0f, 0.0f, 0.0f),
                   glm::vec3(0.0f, 0.0f, 1.0f));
   ubo.proj = glm::perspective(
-      glm::radians(45.0f),
+      glm::radians(ZOOMDEGREES),
       swapChainExtent_.width / (float)swapChainExtent_.height, 0.1f, 10.0f);
   ubo.proj[1][1] *= -1;
 

@@ -13,6 +13,7 @@
 #define GLM_ENABLE_EXPERIMENTAL
 #include <assimp/postprocess.h>  // Post processing flags
 #include <assimp/scene.h>        // Output data structure
+#include <imgui.h>
 
 #include <algorithm>
 #include <array>
@@ -33,12 +34,19 @@
 #include <unordered_map>
 #include <vector>
 
+#include "imgui_impl_glfw.h"
+#include "imgui_impl_vulkan.h"
 #include "stb_image.hpp"
 
-constexpr uint32_t WIDTH = 1024;
-constexpr uint32_t HEIGHT = 768;
+constexpr uint32_t WIDTH = 1280;
+constexpr uint32_t HEIGHT = 720;
+
 static int XPOSITION{0};
 static int YPOSITION{0};
+static bool TOGGLEFULLSCREEN{true};
+static float ZOOMDEGREES{45.0f};
+static float ROTATEDEGREES{45.0f};
+static float TRANSLATEFACTOR{0.0f};
 
 const std::string MODEL_PATH = "../../src/models/viking_room.obj";
 const std::string TEXTURE_PATH = "../../src/textures/viking_room.png";
