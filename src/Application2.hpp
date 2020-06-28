@@ -37,6 +37,8 @@
 
 constexpr uint32_t WIDTH = 1024;
 constexpr uint32_t HEIGHT = 768;
+static int XPOSITION{0};
+static int YPOSITION{0};
 
 const std::string MODEL_PATH = "../../src/models/viking_room.obj";
 const std::string TEXTURE_PATH = "../../src/textures/viking_room.png";
@@ -212,6 +214,8 @@ class Application2 {
   void initWindow();
   static void framebufferResizeCallback(GLFWwindow* window, int width,
                                         int height);
+  static void keyCallback(GLFWwindow* window, int key, int scancode, int action,
+                          int mods);
   void initVulkan();
   void mainLoop();
   void cleanupSwapChain();

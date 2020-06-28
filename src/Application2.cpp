@@ -41,13 +41,42 @@ void Application2::initWindow() {
 
   window_ = glfwCreateWindow(WIDTH, HEIGHT, "Vulkan", nullptr, nullptr);
   glfwSetWindowUserPointer(window_, this);
+  glfwGetWindowPos(window_, &XPOSITION, &YPOSITION);
   glfwSetFramebufferSizeCallback(window_, framebufferResizeCallback);
+  glfwSetKeyCallback(window_, keyCallback);
 }
 
 /*static*/ void Application2::framebufferResizeCallback(GLFWwindow* window,
                                                         int width, int height) {
   auto* app = reinterpret_cast<Application2*>(glfwGetWindowUserPointer(window));
   app->framebufferResized_ = true;
+}
+
+/*static*/ void Application2::keyCallback(GLFWwindow* window, int key,
+                                          int scancode, int action, int mods) {
+  if (action == GLFW_PRESS) {
+    switch (key) {
+      case GLFW_KEY_ESCAPE:
+        glfwSetWindowShouldClose(window, GLFW_TRUE);
+        break;
+      case GLFW_KEY_F:
+        static bool toggleFullScreen{true};
+        if (toggleFullScreen) {
+          GLFWmonitor* monitor = glfwGetPrimaryMonitor();
+          const GLFWvidmode* mode = glfwGetVideoMode(monitor);
+          glfwSetWindowMonitor(window, monitor, 0, 0, mode->width, mode->height,
+                               mode->refreshRate);
+          toggleFullScreen = false;
+        } else {
+          glfwSetWindowMonitor(window, nullptr, XPOSITION, YPOSITION, WIDTH,
+                               HEIGHT, 0);
+          toggleFullScreen = true;
+        }
+        break;
+      default:
+        break;
+    }
+  }
 }
 
 void Application2::initVulkan() {
