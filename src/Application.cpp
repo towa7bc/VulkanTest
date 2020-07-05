@@ -245,16 +245,17 @@ void Application::initImGui() {
   {
     imGuiFramebuffers_.resize(swapChainImageViews_.size());
     for (uint32_t i = 0; i < swapChainImageViews_.size(); ++i) {
-      VkFramebufferCreateInfo info = {};
-      info.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
-      info.renderPass = imguiRenderPass_;
-      info.attachmentCount = 1;
-      info.pAttachments = swapChainImageViews_.data();
-      info.width = swapChainExtent_.width;
-      info.height = swapChainExtent_.height;
-      info.layers = 1;
+      VkFramebufferCreateInfo framebufferInfo = {};
+      framebufferInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
+      framebufferInfo.renderPass = imguiRenderPass_;
+      framebufferInfo.attachmentCount = 1;
+      framebufferInfo.pAttachments = swapChainImageViews_.data();
+      framebufferInfo.width = swapChainExtent_.width;
+      framebufferInfo.height = swapChainExtent_.height;
+      framebufferInfo.layers = 1;
       VkFramebuffer imGuiFrameBuffer{};
-      err = vkCreateFramebuffer(device_, &info, nullptr, &imGuiFrameBuffer);
+      err = vkCreateFramebuffer(device_, &framebufferInfo, nullptr,
+                                &imGuiFrameBuffer);
       check_vk_result(err);
       imGuiFramebuffers_[i] = imGuiFrameBuffer;
     }
@@ -335,8 +336,8 @@ void Application::frameRenderImGui(uint32_t image_index) {
     info.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
     info.renderPass = imguiRenderPass_;
     info.framebuffer = imGuiFramebuffers_[image_index];
-    info.renderArea.extent.width = draw_data->DisplaySize.x;
-    info.renderArea.extent.height = draw_data->DisplaySize.y;
+    info.renderArea.extent = swapChainExtent_;
+    info.renderArea.offset = {0, 0};
     std::array<VkClearValue, 2> clearValues{};
     clearValues[0].color = {0.0f, 0.0f, 0.0f, 1.0f};
     clearValues[1].depthStencil = {1.0f, 0};
@@ -401,9 +402,8 @@ void Application::cleanupSwapChain() {
     vkFreeMemory(device_, uniformBuffersMemory_[i], nullptr);
   }
 
-  vkDestroyDescriptorPool(device_, descriptorPool_, nullptr);
-
   vkDestroyDescriptorPool(device_, imguiDescriptorPool_, nullptr);
+  vkDestroyDescriptorPool(device_, descriptorPool_, nullptr);
 }
 
 void Application::cleanup() {

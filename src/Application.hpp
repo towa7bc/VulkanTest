@@ -39,7 +39,7 @@
 #include "stb_image.hpp"
 
 constexpr uint32_t WIDTH = 1280;
-constexpr uint32_t HEIGHT = 720;
+constexpr uint32_t HEIGHT = 800;
 
 static int XPOSITION{0};
 static int YPOSITION{0};
