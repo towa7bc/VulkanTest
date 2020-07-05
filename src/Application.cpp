@@ -194,13 +194,11 @@ void Application::initImGui() {
   attachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
   attachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
   attachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-  attachment.initialLayout = VK_IMAGE_LAYOUT_SHARED_PRESENT_KHR;
-  attachment.finalLayout =
-      VK_IMAGE_LAYOUT_SHARED_PRESENT_KHR;  // VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
+  attachment.initialLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+  attachment.finalLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
   VkAttachmentReference color_attachment = {};
   color_attachment.attachment = 0;
-  color_attachment.layout =
-      VK_IMAGE_LAYOUT_SHARED_PRESENT_KHR;  // VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+  color_attachment.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
   VkSubpassDescription subpass = {};
   subpass.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
   subpass.colorAttachmentCount = 1;
@@ -404,6 +402,7 @@ void Application::cleanupSwapChain() {
 
   vkDestroyDescriptorPool(device_, imguiDescriptorPool_, nullptr);
   vkDestroyDescriptorPool(device_, descriptorPool_, nullptr);
+  vkDestroyCommandPool(device_, imGuiCommandPool_, nullptr);
 }
 
 void Application::cleanup() {
@@ -429,7 +428,6 @@ void Application::cleanup() {
     vkDestroyFence(device_, inFlightFences_[i], nullptr);
   }
 
-  vkDestroyCommandPool(device_, imGuiCommandPool_, nullptr);
   vkDestroyCommandPool(device_, commandPool_, nullptr);
 
   vkDestroyDevice(device_, nullptr);
@@ -698,8 +696,7 @@ void Application::createRenderPass() {
   colorAttachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
   colorAttachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
   colorAttachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-  colorAttachment.finalLayout =
-      VK_IMAGE_LAYOUT_SHARED_PRESENT_KHR;  // VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+  colorAttachment.finalLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
 
   VkAttachmentDescription depthAttachment{};
   depthAttachment.format = findDepthFormat();
@@ -708,8 +705,7 @@ void Application::createRenderPass() {
   depthAttachment.storeOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
   depthAttachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
   depthAttachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-  depthAttachment.initialLayout =
-      VK_IMAGE_LAYOUT_SHARED_PRESENT_KHR;  // VK_IMAGE_LAYOUT_UNDEFINED;
+  depthAttachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
   depthAttachment.finalLayout =
       VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
 
@@ -721,15 +717,13 @@ void Application::createRenderPass() {
   colorAttachmentResolve.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
   colorAttachmentResolve.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
   colorAttachmentResolve.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-  colorAttachmentResolve.finalLayout =
-      VK_IMAGE_LAYOUT_SHARED_PRESENT_KHR;  // VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
-                                           // //
+  colorAttachmentResolve.finalLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+  // //
                                            // VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
 
   VkAttachmentReference colorAttachmentRef{};
   colorAttachmentRef.attachment = 0;
-  colorAttachmentRef.layout =
-      VK_IMAGE_LAYOUT_SHARED_PRESENT_KHR;  // VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+  colorAttachmentRef.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
 
   VkAttachmentReference depthAttachmentRef{};
   depthAttachmentRef.attachment = 1;
