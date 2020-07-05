@@ -3,10 +3,8 @@ add_executable(
         main.cpp
         stb_image.cpp
         stb_image.hpp
-        #Application.cpp
-        #Application.hpp
-        Application2.cpp
-        Application2.hpp
+        Application.cpp
+        Application.hpp
         imgui_impl_glfw.cpp
         imgui_impl_glfw.h
         imgui_impl_vulkan.cpp
